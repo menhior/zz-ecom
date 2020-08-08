@@ -41,17 +41,25 @@ from .models import *
     return {'cartItems':cartItems ,'order':order, 'items':items}"""
 
 def cartData(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-    else:
-        device = request.COOKIES['device']
-        customer, created = Customer.objects.get_or_create(device=device, name = None)
+    try:
+        if request.user.is_authenticated:
+            customer = request.user.customer
+        else:
+            device = request.COOKIES['device']
+            customer, created = Customer.objects.get_or_create(device=device, name = None)
 
-    order, created = Order.objects.get_or_create(customer=customer, complete=False,)
-    items = order.orderitem_set.all()
-    cartItems = order.get_cart_items
+        order, created = Order.objects.get_or_create(customer=customer, complete=False,)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
 
-    return {'cartItems':cartItems ,'order':order, 'items':items}
+    except:
+        customer = 'Nobody'
+        order = 'empty'
+        items = {}
+        cartItems = 0
+    
+
+    return {'an_customer': customer, 'cartItems':cartItems ,'order':order, 'items':items}
 
     
 """def guestOrder(request, data):
