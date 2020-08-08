@@ -31,13 +31,13 @@ class Customer(models.Model):
 
 """class NameStack(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)"""
+    name = models.CharField(max_length=200, null=True)
 
 class Tag(models.Model):
     name = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return self.name
+        return self.name"""
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
