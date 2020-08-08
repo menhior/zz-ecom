@@ -1,0 +1,29 @@
+{%  extends 'shop/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-body">
+
+			<form action="" method="POST">
+				{% csrf_token %}
+				<p><strong>Customer Name</strong></p>
+				{{form.name}}
+					<hr>
+				<p><strong>Customer Phone</strong></p>
+				{{form.phone}}
+					<hr>
+				<p><strong>Customer Email</strong></p>
+				{{form.email}}
+					<hr>				
+				<input type="submit" name="Submit">
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

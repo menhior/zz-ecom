@@ -1,0 +1,34 @@
+{%  extends 'shop/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-body">
+
+			<form action="" method="POST">
+				{% csrf_token %}
+				<!--{{ form.management_form }}-->
+				<p><strong>Address</strong></p>
+				{{form.address}}
+					<hr>
+				<p><strong>City</strong></p>
+				{{form.city}}
+					<hr>
+				<p><strong>State</strong></p>
+				{{form.state}}
+					<hr>
+				<p><strong>Zipcode</strong></p>
+				{{form.zipcode}}
+					<hr>
+
+				<input class="btn btn-primary" type="submit" name="Submit">
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

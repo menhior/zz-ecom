@@ -1,0 +1,70 @@
+{%  extends 'shop/main.html' %}
+{% block content %}
+	<div class="row">
+	<div class="card card-body">
+				<table class="table table-sm">
+					<tr>
+						<th>Product</th>
+						<th>Quantity</th>
+						<th>Total Amount</th>
+						<th>Remove</th>
+					</tr>
+
+					{% for i in order_item_list %}
+						<tr>
+							<td>{{i.product}}</td>
+							<td>{{i.quantity}}</td>
+							<td>{{i.get_total|floatformat:2}}</td>
+							<td><a class="btn btn-danger" href="{% url 'delete_order_item' i.id %}">Delete Item</a></td>
+						</tr>
+					{% endfor %}
+						<tr>
+							<th>Total Amount</th>
+							<th></th>
+							<th>{{order.get_cart_total}}</th>
+						</tr>
+				</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 card card-body">
+			<table class="table table-sm">
+					<tr>
+						<th>Order Status</th>
+						<th>Date Ordered</th>
+					</tr>
+
+						<tr>
+							<td>{{order.status}}</td>
+							<td>{{order.date_ordered}}</td>
+						</tr>
+						<hr>
+						<tr>
+							<td></td>
+						</tr>
+					<tr>
+						<th>Shipping Information</th>
+					</tr>
+					<tr>
+						<td><strong>Customer: 	</strong>{{shipping_address.customer}}</td>
+						<td><strong>Address: 	</strong> {{shipping_address.address}}</td> 						
+					</tr>
+					<tr>
+						<td><strong>City: 	</strong> {{shipping_address.city}}</td>
+						<td><strong>State: 	</strong> {{shipping_address.state}}</td>
+					</tr>
+					<tr>
+						<td><strong>Zipcode: 	</strong> {{shipping_address.zipcode}}</td>
+					</tr>
+				</table>
+		</div>
+		<div class="col-md-6 card card-body">	
+			<a class = 'btn btn-primary btn-block' href="{% url 'create_order_items' order.id %}">Add Items to the Order</a>
+			{% if count != 0 %}
+				<a class = 'btn btn-info btn-block' href="{% url 'update_shipping' shipping_address.id %}">Update Shipping Information</a>
+			{% else %}
+				<a href="{% url 'create_shipping' order.id %}" class="btn btn-info btn-block">Add Shipping Information</a>
+			{% endif %}
+		</div>
+	</div>
+{% endblock content %}

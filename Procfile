@@ -1,0 +1,1 @@
+web: gunicorn mainkaya.wsgi --log-file -

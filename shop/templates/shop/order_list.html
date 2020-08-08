@@ -1,0 +1,73 @@
+{%  extends 'shop/main.html' %}
+{% block content %}
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<form method="get">
+				{{myFilter.form}}
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<br>
+<div class="row">
+<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Order Id</th>
+					<th>Customer</th>
+					<th>Date Ordered</th>
+					<th>Status</th>
+					<th>Order items</th>
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+
+				{% for order in orders %}
+					<tr>
+						<td>{{order.transaction_id}}</td>
+						<td>{{order.customer}}</td>
+						<td>{{order.date_ordered}}</td>
+						<td>{{order.status}}</td>
+						<td><a class="btn btn-sm btn-primary" href="{% url 'order_item_list' order.id %}">Order Detail</a></td>
+						<td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update Status</a></td>
+
+						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' order.id %}">Delete</a></td>
+					</tr>
+				{% endfor %}
+
+			
+			</table>
+	</div>
+</div>
+
+<br>
+	<br>
+	<div class="row" style="display: flex; justify-content: center;">
+		<nav aria-label="Page navigation example">
+	    {% if orders.has_other_pages %}
+		  <ul class="pagination">
+		    {% if orders.has_previous %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ orders.previous_page_number }}">&laquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+		    {% endif %}
+		    {% for i in orders.paginator.page_range %}
+		      {% if orders.number == i %}
+		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+		      {% else %}
+		        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+		      {% endif %}
+		    {% endfor %}
+		    {% if orders.has_next %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ orders.next_page_number }}">&raquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+		    {% endif %}
+		  </ul>
+		{% endif %}
+	    </nav>
+    </div>
+{% endblock content %}

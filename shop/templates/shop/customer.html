@@ -1,0 +1,145 @@
+{%  extends 'shop/main.html' %}
+
+{% block content %}
+
+	<br>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Customer: {{customer}}</h5>
+			<hr>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'update_customer' customer.id %}">Update Customer</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'place_order' customer.id %}">Place Order</a>
+
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Contact Information</h5>
+			<hr>
+			<p>Email: {{customer.email}}</p>
+			<p>Phone: {{customer.phone}}</p>
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Total Orders</h5>
+			<hr>
+			<h1 style="text-align: center;padding: 10px">{{order_count}}</h1>
+		</div>
+	</div>
+</div>
+
+
+<br>
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<form method="get">
+				{{myFilter.form}}
+				
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<br>
+
+<div class="row">
+	<div class="col-md">
+		<h5>CUSTOMER's ORDERS:</h5>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Order Id</th>
+					<th>Date Orderd</th>
+					<th>Status</th>
+					<th>Update</th>
+					<th>Remove</th>
+					<th>Delete</th>
+				</tr>
+
+				{% for order in orders %}
+
+				<tr>
+					<td>{{order.transaction_id}}</td>
+					<td>{{order.date_ordered}}</td>
+					<td>{{order.status}}</td>
+					<td><a class="btn btn-sm btn-primary" href="{% url 'order_item_list' order.id %}">Order Detail</a></td>
+					<td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
+
+					<td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' order.id %}">Delete</a></td>
+				</tr>
+				{% endfor %}
+
+			</table>
+
+		<br>
+		<div class="row" style="display: flex; justify-content: center;">
+		<nav aria-label="Page navigation example">
+	    {% if orders.has_other_pages %}
+		  <ul class="pagination">
+		    {% if orders.has_previous %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ orders.previous_page_number }}">&laquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+		    {% endif %}
+		    {% for i in orders.paginator.page_range %}
+		      {% if orders.number == i %}
+		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+		      {% else %}
+		        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+		      {% endif %}
+		    {% endfor %}
+		    {% if orders.has_next %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ orders.next_page_number }}">&raquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+		    {% endif %}
+		  </ul>
+		{% endif %}
+	    </nav>
+    </div>
+		</div>
+	</div>
+</div>
+
+
+	<br>
+	
+
+<br>
+<div class="row">
+	<div class="col-md">
+		<h5>CUSTOMER's SHIPPING INFORMATION:</h5>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Address</th>
+					<th>City</th>
+					<th>State</th>
+					<th>Zipcode</th>
+				</tr>
+
+				{% for i in shipping_address %}
+
+				<tr>
+					<td>{{i.address}}</td>
+					<td>{{i.city}}</td>
+					<td>{{i.state}}</td>
+					<td>{{i.zipcode}}</td>
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}

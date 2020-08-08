@@ -1,0 +1,73 @@
+{%  extends 'shop/main.html' %}
+{% block content %}
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<form method="get">
+				{{myFilter.form}}
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<br>
+
+<div class="row">
+<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Customer Name</th>
+					<th>Customer Device</th>
+					<th>Phone</th>
+					<th>Email</th>
+					<th>Date Created</th>
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+
+				{% for customer in customers %}
+					<tr>
+						<td>{{customer.name}}</td>
+						<td>{{customer.device}}</td>
+						<td>{{customer.phone}}</td>
+						<td>{{customer.email}}</td>
+						<td>{{customer.date_created}}</td>
+						<td><a class="btn btn-sm btn-primary" href="{% url 'customer' customer.id %}">View</a></td>
+						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_customer' customer.id %}">Delete</a></td>
+					</tr>
+				{% endfor %}
+
+			
+			</table>
+	</div>
+</div>
+
+<br>
+	<br>
+	<div class="row" style="display: flex; justify-content: center;">
+		<nav aria-label="Page navigation example">
+	    {% if customers.has_other_pages %}
+		  <ul class="pagination">
+		    {% if customers.has_previous %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ customers.previous_page_number }}">&laquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+		    {% endif %}
+		    {% for i in customers.paginator.page_range %}
+		      {% if customers.number == i %}
+		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+		      {% else %}
+		        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+		      {% endif %}
+		    {% endfor %}
+		    {% if customers.has_next %}
+		      <li class="active page-item"><a class="page-link" href="?page={{ customers.next_page_number }}">&raquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+		    {% endif %}
+		  </ul>
+		{% endif %}
+	    </nav>
+    </div>
+{% endblock content %}

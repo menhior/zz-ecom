@@ -1,0 +1,61 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+{% load ratings %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-6">
+			
+			<img style="height:300px;" class="border thumbnail" src="{{product.imageURL}}">
+		</div>
+		<div class="col-lg-6 text-center">
+			<h2><strong>{{product.name}}</strong>  &nbsp;&nbsp;&nbsp;&nbsp;   {{product.price}} AZN</h2>
+			<hr>
+			<h5 style="text-align: sscenter; margin-left: 50px; margin-right: 50px;">{{product.description}}</h5>
+			{% ratings product %}
+		</div>
+	</div>
+	
+	<br>
+	<hr>
+	<div class="row">
+		<div class="col-lg-6">
+			{% if request.user.is_authenticated %}
+                <div class="add-comment">
+                  <header>
+                    <h3 class="h6">Leave a comment</h3>
+                  </header>
+                  <form method="POST" action="." class="commenting-form">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="form-group col-md-12">
+                        {{ form.content }}
+                      </div>
+                      <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-secondary">Submit Comment</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Login to comment</a>
+            {% endif %}
+        </div>
+		
+		<div class="col-lg-6">
+			{% for comment in product.get_comments %}
+			<div class="media mb-4">
+		          <img class="d-flex mr-3 rounded-circle" style="height: 30px;" src="{% static 'images/profile1.png' %}" alt="Profile Picture">
+		          <div class="media-body">
+		            <h5 class="mt-0"><b>{{ comment.user.username }}</b></h5>
+		            {{ comment.content }}
+		          </div>
+		          <b>{{ comment.timestamp|timesince }} ago</b>
+			</div>
+			{% endfor %}
+		</div>
+	</div>	
+
+
+{% endblock %}
+
