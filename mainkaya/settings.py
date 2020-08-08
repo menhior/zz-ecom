@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
 
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
 
     'storages',
 
-
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,10 @@ import dj_database_url
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET'),
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
