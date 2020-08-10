@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import cloudinary
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['zz-ecom.herokuapp.com', '127.0.0.1']
 
@@ -37,8 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'shop.apps.ShopConfig',
 
     'django_filters',
@@ -46,12 +46,12 @@ INSTALLED_APPS = [
     'star_ratings',
 
     'storages',
-
-    'cloudinary',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -131,14 +131,13 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
 
-MEDIA_URL = '/images/'
+"""MEDIA_URL = '/images/'"""
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
@@ -158,10 +157,25 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-    'API_KEY': os.environ.get('API_KEY'),
-    'API_SECRET': os.environ.get('API_SECRET'),
+    'CLOUD_NAME': 'hnrueluvx',
+    'API_KEY': '422343319215628',
+    'API_SECRET': 'rkf1J99QVC9vtExZlNW32vxcIrE'
 }
 
+
+
+"""AWS_S3_HOST = 's3.eu-central-1.amazonaws.com"''
+AWS_S3_REGION_NAME='eu-central-1'
+
+AWS_ACCESS_KEY_ID = 'AKIA6AESGPFA5YERZI6J'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'zey-zak-bucket'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'"""
+
+MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

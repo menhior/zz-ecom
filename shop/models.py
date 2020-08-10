@@ -10,7 +10,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True)
     phone = models.CharField(max_length=200, null=True, blank=True)
     email = models.CharField(max_length=200, null=True)
-    profile_pic = models.ImageField(default="profile1.png", null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='images/', default="profile1.png", null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     device = models.CharField(max_length=200, null=True, blank=True)
 
@@ -43,7 +43,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     """tags = models.ManyToManyField(Tag, null=True, blank=True)"""
 

@@ -198,3 +198,16 @@ h1, h2, h3, h4, h5, h6{
 			padding: 10px;
 			margin-top: 10px;
 		}
+
+#total-orders{
+		background-color: #4cb4c7;
+	}
+
+
+#orders-delivered{
+		background-color: #7abecc;
+	}
+
+#orders-pending{
+		background-color: #7CD1C0;
+	}

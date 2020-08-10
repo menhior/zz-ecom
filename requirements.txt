@@ -20,4 +20,4 @@ whitenoise==5.0.1
 django-star-ratings==0.9.1
 django-bootstrap-form==3.4
 cloudinary==1.22.0
-django-cloudinary-storage==0.2.3
+dj3-cloudinary-storage==0.0.3
