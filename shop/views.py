@@ -603,15 +603,15 @@ def updateShippingInformation(request, shipping_update_pk):
 @login_required(login_url='login')
 def accountSettings(request):
     customer = request.user.customer
-    form = AccountInformationForm(instance=customer)
+    form = CustomerForm(instance=customer)
 
     if request.method == 'POST':
-        form = AccountInformationForm(request.POST, request.FILES,instance=customer)
+        form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
 
 
-    context = {'form':form}
+    context = {'form': form, 'customer': customer,}
     return render(request, 'shop/account_settings.html', context)
 
 

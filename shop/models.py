@@ -10,7 +10,6 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True)
     phone = models.CharField(max_length=200, null=True, blank=True)
     email = models.CharField(max_length=200, null=True)
-    profile_pic = models.ImageField(upload_to='images/', default="profile1.png", null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     device = models.CharField(max_length=200, null=True, blank=True)
 
@@ -20,14 +19,6 @@ class Customer(models.Model):
         else:
             name = self.device
         return str(name)
-
-    @property
-    def profilePicURL(self):
-        try:
-            url = self.profile_pic.url
-        except:
-            url = ''
-        return url
 
 """class NameStack(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)

@@ -50,7 +50,7 @@ class CustomerForm(ModelForm):
     class Meta:
         model=Customer
         fields = '__all__'
-        exclude = ['user', 'device', 'profile_pic']
+        exclude = ['user', 'device']
 
 class UpdateShippingForm(ModelForm):
     class Meta:
@@ -59,18 +59,13 @@ class UpdateShippingForm(ModelForm):
         exclude = ['customer', 'order']
 
 
-class CustomerForm(ModelForm):
-    class Meta:
-        model=Customer
-        fields = '__all__'
-        exclude = ['user', 'device', 'profile_pic']
-
-
 class AccountInformationForm(ModelForm):
     class Meta:
         model=Customer
         fields = '__all__'
         exclude = ['user', 'device',]
+
+
 """class ReviewForm(ModelForm):
 	class Meta:
 		model = Review
