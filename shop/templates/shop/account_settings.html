@@ -32,8 +32,10 @@
 			<form method="POST" action="" enctype="multipart/form-data">
 				{% csrf_token %}
 				{{form.as_p}}
-		
+			{% if request.user.is_staff %}
+			{% else %}
 			<input class="btn btn-primary" type="submit" name="Update Information">
+			{% endif %}
 			</form>
 		</div>
 	</div>

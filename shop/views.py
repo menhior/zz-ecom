@@ -521,6 +521,8 @@ def placeOrder(request, pk):
 @admin_only
 def updateCustomer(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
+    user = customer.user
+    user_group = user.groups.all()[0].name
     form = CustomerForm(instance=customer)
     if request.method == 'POST':
 
@@ -529,7 +531,7 @@ def updateCustomer(request, pk):
             form.save()
             return redirect('/customer/' + str(pk))
 
-    context = {'form':form}
+    context = {'form':form, 'user_group':user_group,}
     return render(request, 'shop/customer_update.html', context)
 
 @login_required(login_url='login')

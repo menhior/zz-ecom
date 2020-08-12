@@ -18,7 +18,10 @@
 				<p><strong>Customer Email</strong></p>
 				{{form.email}}
 					<hr>				
-				<input type="submit" name="Submit">
+				{% if user_group == 'admin' %}
+				{% else %}
+				<input class="btn btn-primary" type="submit" name="Update Information">
+				{% endif %}
 			</form>
 
 		</div>
