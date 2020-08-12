@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['zz-ecom.herokuapp.com', '127.0.0.1']
 
@@ -159,9 +159,9 @@ DATABASES['default'].update(db_from_env)
 
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'hnrueluvx',
-    'API_KEY': '422343319215628',
-    'API_SECRET': 'rkf1J99QVC9vtExZlNW32vxcIrE'
+    'CLOUD_NAME': os.environ.get('cloud_name'),
+    'API_KEY': os.environ.get('api-key'),
+    'API_SECRET': os.environ.get('api-secret')
 }
 
 
