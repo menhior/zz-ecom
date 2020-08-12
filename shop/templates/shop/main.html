@@ -13,6 +13,8 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
+	<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet" type="text/css">
+
 
 	<script type="text/javascript">
 		var user = '{{request.user}}'
@@ -160,7 +162,22 @@
 
 
             {% endblock content %}
-         </div>
+     </div>
+
+    <footer class="page-footer font-small blue pt-4 ">
+	  <div class="container-fluid text-center text-md-left">
+	    <div class="row">
+	      <div class="col text-center">
+	        <h2 id="contacts" style="font-family:Courgette, monospace;">Dear Guest, welcome to my dummy website made for my portfolio. If interested in checking functionality please feel free to use any of accounts below or simply register yourself. In any way have a nice day:</h5>
+	        <p><b>Customer account</b> : +86 188 2664 2004</p>
+	        <p><b>Staff account</b> : minuxlace@gmail.com</p>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+	    <p> Minux-Lace</p>
+	  </div>
+	</footer>
 
 
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>

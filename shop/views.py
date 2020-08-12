@@ -229,8 +229,9 @@ def logoutUser(request):
 
 
 def registerPage(request):
-    try:
+    """try:
         device = request.COOKIES['device']
+        an_customer = 'Not_Nobody'
 
         if request.user.is_authenticated:
             return redirect('store')
@@ -255,7 +256,32 @@ def registerPage(request):
                     return redirect('login')
     except:
         an_customer = 'Nobody'
+        form = CreateUserForm()"""
+
+    device = request.COOKIES['device']
+    an_customer = 'Not_Nobody'
+
+    if request.user.is_authenticated:
+        return redirect('store')
+    else:
         form = CreateUserForm()
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                Customer.objects.create(
+                    user=user,
+                    name=user.first_name + ' ' + user.last_name,
+                    email = user.email,
+                    device = device
+                    )
+                group = Group.objects.get(name='customer')
+                user.groups.add(group)
+
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + username)
+
+                return redirect('login')
 
         context = {'form': form, 'an_customer': an_customer}
         return render(request, 'shop/register.html', context)
