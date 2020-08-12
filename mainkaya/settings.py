@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['zz-ecom.herokuapp.com', '127.0.0.1']
 
@@ -164,18 +164,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('api-secret')
 }
 
-
-
-"""AWS_S3_HOST = 's3.eu-central-1.amazonaws.com"''
-AWS_S3_REGION_NAME='eu-central-1'
-
-AWS_ACCESS_KEY_ID = 'AKIA6AESGPFA5YERZI6J'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'zey-zak-bucket'
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'"""
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
