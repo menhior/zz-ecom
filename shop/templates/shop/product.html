@@ -45,13 +45,13 @@
 		<div class="col-lg-6">
 			{% for comment in product.get_comments %}
 			<div class="media mb-4">
-		          <img class="d-flex mr-3 rounded-circle" style="height: 30px;" src="{% static 'images/profile1.png' %}" alt="Profile Picture">
 		          <div class="media-body">
 		            <h5 class="mt-0"><b>{{ comment.user.username }}</b></h5>
 		            {{ comment.content }}
 		          </div>
 		          <b>{{ comment.timestamp|timesince }} ago</b>
 			</div>
+			<hr>
 			{% endfor %}
 		</div>
 	</div>	

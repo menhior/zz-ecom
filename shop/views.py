@@ -181,8 +181,6 @@ def contactView(request):
 def product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     customer = request.user.customer
-    profile_picture = customer.profile_pic
-    print(profile_picture)
     form = CommentForm()
 
     if request.method == 'POST':
@@ -193,7 +191,7 @@ def product(request, pk):
             form.save()
             return redirect('/product/' + str(pk) + '/')
 
-    context = {'product': product, 'profile_picture': profile_picture,'form': form}
+    context = {'product': product,'form': form}
     return render(request, 'shop/product.html', context)
 
 def about(request):
