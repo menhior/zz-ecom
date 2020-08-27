@@ -180,7 +180,6 @@ def contactView(request):
 
 def product(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    customer = request.user.customer
     form = CommentForm()
 
     if request.method == 'POST':
