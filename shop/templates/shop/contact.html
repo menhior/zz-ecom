@@ -3,27 +3,46 @@
 
 
 {% block content %}
-  {% if request.user.is_authenticated %}
 
-      <div class="row">
+
+  <div class="row">
       <div class="col-lg-6">
         <br>
         <br>
-        <h3 class="contact-text"><strong>Dear {{request.user}}.</strong></h3>
+        {% if request.user.is_authenticated %}
+          <h3 class="contact-text"><strong>Dear {{request.user}}.</strong></h3>
+        {% else %}
+          <h3 class="contact-text"><strong>Dear Guest.</strong></h3>
+        {% endif %}
         <h6 class="contact-text">If you have any questions about the products or would just like a personal advice please feel free to contact us any time.</h6>
       </div>
       <div class="col-lg-6">
 
         <form method='post'>
           {% csrf_token %}
+            {% if request.user.is_authenticated %}
+            {% else %}
             <div class="form-group">
-              <label  for="InputSubject">Subject</label>  
-              <p id="InputSubject">{{form.subject}}</p>
+              <label>Name</label>
+              <input required class="form-control" type="text" name="name">
+            </div>
+
+            <div class="form-group">
+              <label>Email</label>
+              <input required class="form-control" type="text" name="email">
+            </div>
+            {% endif %}
+
+            
+
+            <div class="form-group">
+              <label>Subject</label>
+              <input required class="form-control" type="text" name="subject">
             </div>
       
             <div class="form-group">
-              <label for="InputMessage">Message</label>
-              <p id="InputMessage">{{form.message}}</p>
+              <label>Message</label>
+              <textarea required class="form-control" name="message"></textarea>
             </div>
       
             <div class="form-actions text-center">
@@ -32,76 +51,6 @@
           </form>
       </div>
 
-    </div>
-    
-    <script>
-      var form_fields = document.getElementsByTagName('input')
-      form_fields[1].placeholder='Subject...';
-
-      for (var field in form_fields){ 
-        form_fields[field].className += ' form-control'
-      }
-
-
-      var message_field = document.getElementsByName('message')
-      message_field[0].className += ' form-control'
-      message_field[0].placeholder='Message..';
-    </script>
-
-  {% else %}
-
-    <div class="row">
-    <div class="col-lg-6">
-      <br>
-      <br>
-      <h3 class="contact-text"><strong>Please feel free to contact.</strong></h3>
-      <h6 class="contact-text">You need some personal assistance? Please do not shy away from writting us a message. We would be pleased to respond as soon as we can.</h6>
-    </div>
-    <div class="col-lg-6">
-
-      <form method='post'>
-        {% csrf_token %}
-
-          <div class="form-group">
-            <label for="InputEmail">Email address</label>
-            <p id="InputEmail" aria-describedby="emailHelp">{{form.Your_email}}</p>
-          </div>
-          <div class="form-group">
-            <label  for="InputSubject">Subject</label>  
-            <p id="InputSubject">{{form.subject}}</p>
-          </div>
-    
-          <div class="form-group">
-            <label for="InputMessage">Message</label>
-            <p id="InputMessage">{{form.message}}</p>
-          </div>
-    
-          <div class="form-actions text-center">
-            <button class="btn btn-primary btn-lg" style="width: 50%" type="submit">Send</button>
-          </div>
-        </form>
-    </div>
-
-    </div>
-    
-    <script>
-      var form_fields = document.getElementsByTagName('input')
-      form_fields[1].placeholder='Email..';
-      form_fields[2].placeholder='Subject...';
-
-      for (var field in form_fields){ 
-        form_fields[field].className += ' form-control'
-      }
-
-
-      var message_field = document.getElementsByName('message')
-      message_field[0].className += ' form-control'
-      message_field[0].placeholder='Message..';
-    </script>    
-
-  {% endif %}
-
-
-	
+    </div>	
 
  {% endblock %}

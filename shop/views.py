@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.http import JsonResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import Group
-from django.db.models.query import EmptyQuerySet
+from django.template.loader import render_to_string
 import json
 import datetime 
 
@@ -16,10 +17,23 @@ from django.contrib import messages
 
 from .models import *
 from .forms import *
-from .filters import *
-from .utils import *
+from .filters import*
 from .decorators import *
 # Create your views here.
+
+def cartData(request):
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+    else:
+        device = request.COOKIES['device']
+        customer, created = Customer.objects.get_or_create(device=device, name = None)
+
+    order, created = Order.objects.get_or_create(customer=customer, complete=False,)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items  
+
+    return {'cartItems':cartItems ,'order':order, 'items':items, 'customer': customer}
 
 def store(request):
 
@@ -27,7 +41,6 @@ def store(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    an_customer = data['an_customer']
 
     product_list = Product.objects.all()
 
@@ -44,7 +57,7 @@ def store(request):
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
 
-    context = {'an_customer':  an_customer, 'products': products, 'cartItems': cartItems, 'myFilter': myFilter, 'paginator': paginator,}
+    context = {'products': products, 'cartItems': cartItems, 'myFilter': myFilter, 'paginator': paginator,}
     return render(request, 'shop/store.html', context)
 
 def cart(request):
@@ -53,9 +66,8 @@ def cart(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    an_customer = data['an_customer']
  
-    context = {'an_customer':  an_customer, 'items': items, 'order':order, 'cartItems': cartItems}
+    context = {'items': items, 'order':order, 'cartItems': cartItems}
     return render(request, 'shop/cart.html', context)
 
 def checkout(request):
@@ -64,9 +76,8 @@ def checkout(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    an_customer = data['an_customer']
 
-    context = {'an_customer':  an_customer, 'items': items, 'order':order, 'cartItems': cartItems}
+    context = {'items': items, 'order':order, 'cartItems': cartItems}
     return render(request, 'shop/checkout.html', context)
 
 def updateItem(request):
@@ -113,7 +124,7 @@ def processOrder(request):
         customer = request.user.customer
     else:
         device = request.COOKIES['device']
-        customer, created = Customer.objects.get_or_create(device=device, name = None)
+        customer, created = Customer.objects.get_or_create(device=device, name = customer_name, email=customer_email)
 
         
     order, created = Order.objects.get_or_create(customer=customer, complete=False)    
@@ -141,41 +152,35 @@ def processOrder(request):
     return JsonResponse('Payment subbmitted..', safe=False)
 
 def contactView(request):
-    if request.user.is_authenticated:
-        user = request.user
-
-        if request.method == 'GET':
-            form = CustomerContactForm()
+    data = cartData(request)
+    cartItems = data['cartItems']
+    user_id = request.user.id
+    if request.method == 'POST':
+        if user_id == None:
+            template = render_to_string('shop/email_template.html', {
+                'name':request.POST['name'],
+                'email':request.POST['email'],
+                'message':request.POST['message'],
+                })
         else:
-            form = CustomerContactForm(request.POST)
-            if form.is_valid():
-                from_email = user.email
-                subject = form.cleaned_data['subject']
-                message = 'email: ' + from_email + '\n' + '\n' +"Message: " + form.cleaned_data['message']
-                try:
-                    send_mail(subject, message, from_email, ['menhior1@gmail.com'], fail_silently=True)
-                except BadHeaderError:
-                    return HttpResponse('Invalid header found.')
+            user = request.user
+            template = render_to_string('shop/email_template.html', {
+                'name':user.customer.name,
+                'email':user.email,
+                'message':request.POST['message'],
+                })
 
-                return redirect('success')
+        email = EmailMessage(
+            request.POST['subject'],
+            template,
+            settings.EMAIL_HOST_USER,
+            ['menhior1@gmail.com']
+            )
+        email.fail_silently=False
+        email.send()
+        return redirect('success')
 
-    else:
-        if request.method == 'GET':
-            form = ContactForm()
-        else:
-            form = ContactForm(request.POST)
-            if form.is_valid():
-                from_email = form.cleaned_data['Your_email']
-                subject = form.cleaned_data['subject']
-                message = 'email: ' + from_email + '\n' + '\n' +"Message: " + form.cleaned_data['message']
-                try:
-                    send_mail(subject, message, from_email, ['menhior1@gmail.com'], fail_silently=True)
-                except BadHeaderError:
-                    return HttpResponse('Invalid header found.')
-                return redirect('success')
-    context = {'form': form}
-    return render(request, 'shop/contact.html', context)
-
+    return render(request, 'shop/contact.html', {'cartItems': cartItems})
 
 
 def product(request, pk):
@@ -194,11 +199,14 @@ def product(request, pk):
     return render(request, 'shop/product.html', context)
 
 def about(request):
-    context={}
-    return render(request, 'shop/about.html')
+    data = cartData(request)
+    cartItems = data['cartItems']
+    return render(request, 'shop/about.html', {'cartItems': cartItems})
 
 def successView(request):
-    return render(request, 'shop/contact_success.html')
+    data = cartData(request)
+    cartItems = data['cartItems']
+    return render(request, 'shop/contact_success.html', {'cartItems': cartItems})
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -226,37 +234,8 @@ def logoutUser(request):
 
 
 def registerPage(request):
-    """try:
-        device = request.COOKIES['device']
-        an_customer = 'Not_Nobody'
-
-        if request.user.is_authenticated:
-            return redirect('store')
-        else:
-            form = CreateUserForm()
-            if request.method == 'POST':
-                form = CreateUserForm(request.POST)
-                if form.is_valid():
-                    user = form.save()
-                    Customer.objects.create(
-                        user=user,
-                        name=user.first_name + ' ' + user.last_name,
-                        email = user.email,
-                        device = device
-                        )
-                    group = Group.objects.get(name='customer')
-                    user.groups.add(group)
-
-                    username = form.cleaned_data.get('username')
-                    messages.success(request, 'Account was created for ' + username)
-
-                    return redirect('login')
-    except:
-        an_customer = 'Nobody'
-        form = CreateUserForm()"""
 
     device = request.COOKIES['device']
-    an_customer = 'Not_Nobody'
 
     if request.user.is_authenticated:
         return redirect('store')
@@ -280,22 +259,20 @@ def registerPage(request):
 
                 return redirect('login')
 
-        context = {'form': form, 'an_customer': an_customer}
+        context = {'form': form,}
         return render(request, 'shop/register.html', context)
 
 @login_required(login_url='login')
 @admin_only
 def dashboardView(request):
     orders = Order.objects.all().filter(complete=True).order_by('-date_ordered')
-
-    customers = Customer.objects.all().order_by('-date_created')[:5]
-
-    total_customers = customers.count()
-
     total_orders = orders.count()
+    orders_list = list(orders)[:5]
+    customers = Customer.objects.all().order_by('-date_created')[:5]
+  
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
-    orders_list = list(orders)[:5]
+    
     context = {'orders':orders_list, 'customers':customers,
     'total_orders':total_orders,'delivered':delivered,
     'pending':pending }
@@ -304,6 +281,8 @@ def dashboardView(request):
 
 @login_required(login_url='login')
 def userView(request):
+    data = cartData(request)
+    cartItems = data['cartItems']
     if request.user.is_authenticated:
         customer = request.user.customer
         orders_list = customer.order_set.all().filter(complete=True)
@@ -323,10 +302,10 @@ def userView(request):
             orders = paginator.page(paginator.num_pages)
 
         context = {'orders':orders, 'total_orders':total_orders,
-        'delivered':delivered,'pending':pending, 'paginator': paginator}
+        'delivered':delivered,'pending':pending, 'paginator': paginator, 'cartItems': cartItems}
         return render(request, 'shop/user.html', context)
     else:
-        return render(request, 'shop/login_required.html', {})
+        return render(request, 'shop/login_required.html')
 
 @login_required(login_url='login')
 @admin_only
@@ -395,9 +374,7 @@ def createOrder(request):
             form.instance.complete =True
             order = form.save()
             if ShippingAddress.objects.all().filter(customer = order.customer).count() != 0:
-                print(ShippingAddress.objects.all().filter(customer = order.customer).latest('date_added'))
                 shipping_adress_for_order = ShippingAddress.objects.all().filter(customer = order.customer).latest('date_added')              
-                print(shipping_adress_for_order.address)
                 order.shippingaddress = ShippingAddress.objects.create(
                     customer=order.customer,
                     order=order,
@@ -409,23 +386,6 @@ def createOrder(request):
                 return redirect('/dashboard/')
             else:
                 return redirect('/dashboard/')
-            """if ShippingAddress.objects.all().filter(customer = order.customer) != None:
-                shipping_adress_for_order = ShippingAddress.objects.all().filter(customer = order.customer).latest('date_added')              
-                order.shippingaddress = shipping_adress_for_order"""
-
-                
-
-    """OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10 )
-    customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
-    #form = OrderForm(initial={'customer':customer})
-    if request.method == 'POST':
-        #print('Printing POST:', request.POST)
-        form = OrderForm(request.POST)
-        formset = OrderFormSet(request.POST, instance=customer)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/')"""
 
     context = {'form':form,}
     return render(request, 'shop/order_create.html', context)
@@ -560,7 +520,7 @@ def createOrderItems(request, order_pk):
             return redirect('/order_item_list/' + str(order_pk))
 
     context = {'form':formset}
-    return render(request, 'shop/create_order_items.html', context)
+    return render(request, 'shop/order_items_create.html', context)
 
 @login_required(login_url='login')
 @admin_only
@@ -593,22 +553,6 @@ def createShippingInformation(request, shipping_create_pk):
     return render(request, 'shop/shipping_create.html', context)
 
 
-"""def placeOrder(request, pk):
-    customer = Customer.objects.get(id=pk)
-    form = FullOrderForm()
-    #form = OrderForm(initial={'customer':customer})
-    if request.method == 'POST':
-        #form = OrderForm(request.POST)
-        form = FullOrderForm(request.POST)
-        if form.is_valid():
-            form.instance.customer = customer
-            form.instance.complete =True
-            order = form.save()
-            print(order)
-            return redirect('/customer/' + str(pk))
-
-    context = {'form':form}
-    return render(request, 'shop/order_for_customer.html', context)"""
 
 @login_required(login_url='login')
 @admin_only
@@ -627,7 +571,9 @@ def updateShippingInformation(request, shipping_update_pk):
 
 @login_required(login_url='login')
 def accountSettings(request):
-    customer = request.user.customer
+    data = cartData(request)
+    cartItems = data['cartItems']
+    customer = data['customer']
     form = CustomerForm(instance=customer)
 
     if request.method == 'POST':
@@ -636,12 +582,14 @@ def accountSettings(request):
             form.save()
 
 
-    context = {'form': form, 'customer': customer,}
+    context = {'form': form, 'customer': customer, 'cartItems': cartItems}
     return render(request, 'shop/account_settings.html', context)
 
 
 @login_required(login_url='login')
 def customerOrderDetails(request, pk):
+    data = cartData(request)
+    cartItems = data['cartItems']
     order = get_object_or_404(Order, pk=pk)
     order_item_list = order.orderitem_set.all()
     count = order.shippingaddress_set.all().count()
@@ -650,5 +598,6 @@ def customerOrderDetails(request, pk):
     else:
         shipping_address = None
 
-    context = {'order': order, 'order_item_list': order_item_list, 'shipping_address': shipping_address, 'count': count}
+    context = {'order': order, 'order_item_list': order_item_list,
+     'shipping_address': shipping_address, 'count': count, 'cartItems': cartItems}
     return render(request, 'shop/customer_order_details.html', context)

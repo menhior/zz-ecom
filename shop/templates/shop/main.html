@@ -2,159 +2,144 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Ecom</title>
+    <title>Ecom</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-	<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
 
-	<link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
-	<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet" type="text/css">
-
-
-	<script type="text/javascript">
-		var user = '{{request.user}}'
-
-		function getToken(name) {
-		    var cookieValue = null;
-		    if (document.cookie && document.cookie !== '') {
-		        var cookies = document.cookie.split(';');
-		        for (var i = 0; i < cookies.length; i++) {
-		            var cookie = cookies[i].trim();
-		            // Does this cookie string begin with the name we want?
-		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-		                break;
-		            }
-		        }
-		    }
-		    return cookieValue;
-		}
-		var csrftoken = getToken('csrftoken')
-		
-
-		function getCookie(name) {
-		    // Split cookie string and get all individual name=value pairs in an array
-		    var cookieArr = document.cookie.split(";");
-
-		    // Loop through the array elements
-		    for(var i = 0; i < cookieArr.length; i++) {
-		        var cookiePair = cookieArr[i].split("=");
-
-		        /* Removing whitespace at the beginning of the cookie name
-		        and compare it with the given string */
-		        if(name == cookiePair[0].trim()) {
-		            // Decode the cookie value and return
-		            return decodeURIComponent(cookiePair[1]);
-		        }
-		    }
-
-		    // Return null if not found
-		    return null;
-		}
-		/*var cart = JSON.parse(getCookie('cart'))
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet" type="text/css">
 
 
-		if (cart == undefined){
-			cart = {}
-			console.log('Cart Created!', cart)
-			document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-		}
-		console.log('Cart:', cart)*/
+    <script type="text/javascript">
+        var user = '{{request.user}}'
 
-		function uuidv4() {
-		  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-		    return v.toString(16);
-		  });
-		}
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getToken('csrftoken')
+        
 
-		var device = getToken('device')
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
 
-		if (device == null || device == undefined){
-			device = uuidv4()
-			location.reload(true)
-		}
+            // Loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
 
-		document.cookie = 'device=' + device + ';domain=;path=/'
-	</script>
-	<script>
-		/*var an_customer = '{{an_customer}}';
-		if (an_customer=='Nobody'){
-			location.reload(true)
-		}*/
-	</script>
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if(name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            // Return null if not found
+            return null;
+        }
+
+        function uuidv4() {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
+        }
+
+        var device = getToken('device')
+
+        if (device == null || device == undefined){
+            device = uuidv4()
+            location.reload(true)
+        }
+
+        document.cookie = 'device=' + device + ';domain=;path=/'
+    </script>
 
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="{% url 'store' %}">Store</a>
-	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-	    <span class="navbar-toggler-icon"></span>
-	  </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{% url 'store' %}">Store</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	    <ul class="navbar-nav mr-auto">
-	      <li class="nav-item active">
-	        <a class="nav-link" href="{% url 'about' %}">About <span class="sr-only">(current)</span></a>
-	      </li>
-	      
-	      <li class="nav-item active">
-	        <a class="nav-link" href="{% url 'contact' %}">Contact <span class="sr-only">(current)</span></a>
-	      </li>
-	      <li>
-	      	<span></span>
-	      </li>
-	    </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'about' %}">About <span class="sr-only">(current)</span></a>
+          </li>
+          
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'contact' %}">Contact <span class="sr-only">(current)</span></a>
+          </li>
+          <li>
+            <span></span>
+          </li>
+        </ul>
 
-	    <div class="form-inline my-2 my-lg-0">
-	    	{% if request.user.is_authenticated %}
-	    		{% if request.user.is_staff %}
-	  					<span style="font-size: 18px;color: #fff;margin-right: 20px;">
-				  		<div class="btn-group">
-						  <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						     {{request.user}}
-						  </button>
-						  
-						  <div class="dropdown-menu">
-						    <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
-						    <a class="dropdown-item" href="{% url 'account_settings' %}">Account Settings</a>
-						  </div>
-						</div>
-						</span>
-						<span><a style="font-size: 18px;color: #fff;margin-right: 20px;" href="{% url 'logout' %}">Logout</a></span>
-	  				{% else %}
-	  					<span style="font-size: 18px;color: #fff;margin-right: 20px;">
-				  		<div class="btn-group">
-						  <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						     {{request.user}}
-						  </button>
-						  
-						  <div class="dropdown-menu">
-						    <a class="dropdown-item" href="{% url 'user' %}">Customer Orders</a>
-						    <a class="dropdown-item" href="{% url 'account_settings' %}">Account Settings</a>
-						  </div>
-						</div>
-						</span>
-						<span><a style="font-size: 18px;color: #fff;margin-right: 20px;" href="{% url 'logout' %}">Logout</a></span>
-	  				{% endif %}
-	  		{% else %}
-	  		<a href="{% url 'login' %}" class="btn btn-warning">Login</a>
-	  		{% endif %}
-        	<a href="{% url 'cart' %}">
-          	<img  id="cart-icon" src="{% static 'images/cart.png' %}">
-    	    </a>
- 	      	<p id="cart-total">{{cartItems}}</p>
+        <div class="form-inline my-2 my-lg-0">
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_staff %}
+                        <span style="font-size: 18px;color: #fff;margin-right: 20px;">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             {{request.user}}
+                          </button>
+                          
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+                            <a class="dropdown-item" href="{% url 'account_settings' %}">Account Settings</a>
+                          </div>
+                        </div>
+                        </span>
+                        <span><a style="font-size: 18px;color: #fff;margin-right: 20px;" href="{% url 'logout' %}">Logout</a></span>
+                    {% else %}
+                        <span style="font-size: 18px;color: #fff;margin-right: 20px;">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             {{request.user}}
+                          </button>
+                          
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'user' %}">Customer Orders</a>
+                            <a class="dropdown-item" href="{% url 'account_settings' %}">Account Settings</a>
+                          </div>
+                        </div>
+                        </span>
+                        <span><a style="font-size: 18px;color: #fff;margin-right: 20px;" href="{% url 'logout' %}">Logout</a></span>
+                    {% endif %}
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-warning">Login</a>
+            {% endif %}
+            <a href="{% url 'cart' %}">
+            <img  id="cart-icon" src="{% static 'images/cart.png' %}">
+            </a>
+            <p id="cart-total">{{cartItems}}</p>
 
-    	</div>
+        </div>
 
-	  </div>
-	</nav>
+      </div>
+    </nav>
 
      <div class="container">
             <br>
@@ -163,34 +148,34 @@
 
             {% endblock content %}
      </div>
-	<br>
-	<br>
-	<br>
-	<br>
+    <br>
+    <br>
+    <br>
+    <br>
     <footer class="page-footer font-small blue pt-4 ">
-	  <div class="container-fluid text-center text-md-left">
-	    <div class="row">
-	      <div class="col text-center">
-	        <h2 id="contacts" style="font-family:Courgette, monospace;">Dear Guest, welcome to my dummy website made for learning more about Django Framework. If interested in checking functionality please feel free to use staff account below to check /dashboard (you can access it through navbar or by directly going to the link when you are authenticated) or simply register customer account yourself. In any way have a nice day!</h5>
-	        <p><b>LOGIN</b> : saladin </p>
-	        <p><b>PASSWORD</b> : ASDFqwe1234</p>
-	      </div>
-	    </div>
-	  </div>
-	  <div class="footer-copyright text-center py-3">
-	    <p><b> Sincerely, Zeynalov Zakir</b></p>
-	  </div>
-	</footer>
+      <div class="container-fluid text-center text-md-left">
+        <div class="row">
+          <div class="col text-center">
+            <h3 id="contacts" style="font-family:Courgette, monospace;">Dear Guest, thank you for visiting my website. It is my sping on <a href="https://www.youtube.com/watch?v=QSyrThcaghg&list=PL-51WBLyFTg0omnamUjL1TCVov7yDTRng">tutorial</a> by Dennis Ivanov with lots of added functionality. You can find source code on of this project in the description of one of the products. Also account provided below to access staff panel. Hope you have a nice day!</h3>
+            <p><b>LOGIN</b> : saladin </p>
+            <p><b>PASSWORD</b> : ASDFqwe1234</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright text-center py-3">
+        <p><b> Sincerely, Zeynalov Zakir</b></p>
+      </div>
+    </footer>
 
 
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 
-	<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

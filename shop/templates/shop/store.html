@@ -53,14 +53,6 @@
 		    // Return null if not found
 		    return null;
 		}
-		/*var cart = JSON.parse(getCookie('cart'))
-
-		if (cart == undefined){
-			cart = {}
-			console.log('Cart Created!', cart)
-			document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-		}
-		console.log('Cart:', cart)*/
 
 		function uuidv4() {
 		  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -77,12 +69,6 @@
 
 		document.cookie = 'device=' + device + ';domain=;path=/'
 		
-	</script>
-	<script>
-		/*var an_customer = '{{an_customer}}';
-		if (an_customer=='Nobody'){
-			location.reload(true)
-		}*/
 	</script>
 	
 	
@@ -218,7 +204,7 @@
 	  <div class="container-fluid text-center text-md-left">
 	    <div class="row">
 	      <div class="col text-center">
-	        <h2 id="contacts" style="font-family:Courgette, monospace;">Dear Guest, welcome to my dummy website made for learning more about Django Framework. If interested in checking functionality please feel free to use staff account below to check /dashboard (you can access it through navbar or by directly going to the link when you are authenticated) or simply register customer account yourself. In any way have a nice day!</h5>
+	        <h3 id="contacts" style="font-family:Courgette, monospace;">Dear Guest, thank you for visiting my website. It is my sping on <a href="https://www.youtube.com/watch?v=QSyrThcaghg&list=PL-51WBLyFTg0omnamUjL1TCVov7yDTRng">tutorial</a> by Dennis Ivanov with lots of added functionality. You can find source code on of this project in the description of one of the products. Also account provided below to access staff panel. Hope you have a nice day!</h3>
 	        <p><b>LOGIN</b> : saladin </p>
 	        <p><b>PASSWORD</b> : ASDFqwe1234</p>
 	      </div>
