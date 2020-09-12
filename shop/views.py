@@ -184,6 +184,10 @@ def contactView(request):
 
 
 def product(request, pk):
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+
     product = get_object_or_404(Product, pk=pk)
     form = CommentForm()
 
@@ -195,7 +199,7 @@ def product(request, pk):
             form.save()
             return redirect('/product/' + str(pk) + '/')
 
-    context = {'product': product,'form': form}
+    context = {'product': product,'form': form, 'cartItems': cartItems}
     return render(request, 'shop/product.html', context)
 
 def about(request):
